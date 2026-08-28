@@ -21,12 +21,12 @@ add_executable(main src/main.cpp)
 target_link_libraries(main PRIVATE SQLite::SQLite3)
 target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_executable(hello_test src/test/hello_test.cpp)
-target_link_libraries(hello_test PRIVATE GTest::gtest_main SQLite::SQLite3)
-target_include_directories(hello_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_executable(testT src/test/hello_test.cpp  src/test/testHarversine.cpp )
+target_link_libraries(testT PRIVATE GTest::gtest_main SQLite::SQLite3)
+target_include_directories(testT PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 include(GoogleTest)
-gtest_discover_tests(hello_test)
+gtest_discover_tests(testT)
 
 
 
