@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-inline std::vector<int> readFile(std::string &filepath){
+inline std::vector<int> readFile(const std::string &filepath){
 
     std::ifstream file(filepath);
 

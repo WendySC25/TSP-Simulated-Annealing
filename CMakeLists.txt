@@ -17,7 +17,7 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_executable(main src/main.cpp)
+add_executable(main src/main.cpp src/tsp/db/CityDatabase.cpp)
 target_link_libraries(main PRIVATE SQLite::SQLite3)
 target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
