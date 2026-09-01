@@ -20,9 +20,7 @@ TEST(SolutionTest, tsp40) {
     EnvironmentTSP env(cities, connections);
 
     int n = ids.size();
-    std::vector<int> path(n);
-    std::iota(path.begin(), path.end(), 0);
-    SolutionTSP s(path, env.getMatrix(), env.getNormalizer(), 25);
+    SolutionTSP s(ids, env.getMatrix(), env.getNormalizer(), 25);
 
     EXPECT_NEAR(maxD, env.getMaxDS(), 1e-9);
     EXPECT_NEAR(normalizer, env.getNormalizer(), 1e-9);
@@ -46,9 +44,7 @@ TEST(SolutionTest, tsp150) {
     EnvironmentTSP env(cities, connections);
 
     int n = ids.size();
-    std::vector<int> path(n);
-    std::iota(path.begin(), path.end(), 0);
-    SolutionTSP s(path, env.getMatrix(), env.getNormalizer(), 25);
+    SolutionTSP s(ids, env.getMatrix(), env.getNormalizer(), 25);
 
     EXPECT_NEAR(maxD, env.getMaxDS(), 1e-9);
     EXPECT_NEAR(normalizer, env.getNormalizer(), 1e-9);

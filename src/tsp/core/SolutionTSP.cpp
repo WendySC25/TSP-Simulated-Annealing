@@ -2,6 +2,8 @@
 
 SolutionTSP::SolutionTSP(const std::vector<int> &ids, const std::vector<std::vector<double> > & m, double norm, int seed) 
 : matrix(m), normalizer(norm), n(m.size()), path(ids), rd(seed), uniform(0,n-1){
+    path.resize(n);
+    for(int i = 0; i < n; i++) path[i] = i; 
     evaluate();
 }
 
@@ -59,7 +61,7 @@ double SolutionTSP::getSwapCost(int i, int j){
         old += matrix[u][v];
         neww += matrix[v][u];
     } else { 
-        
+
         if(i < n - 1) { 
             old += matrix[u][path[i+1]];
             neww += matrix[v][path[i+1]];
