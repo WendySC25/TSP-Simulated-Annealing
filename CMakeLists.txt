@@ -17,13 +17,24 @@ FetchContent_MakeAvailable(googletest)
 
 enable_testing()
 
-add_executable(main src/main.cpp src/tsp/db/CityDatabase.cpp)
-target_link_libraries(main PRIVATE SQLite::SQLite3)
-target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+add_library(tsp_core
+    src/tsp/db/CityDatabase.cpp
+    src/tsp/core/EnvironmentTSP.cpp
+    src/tsp/core/SolutionTSP.cpp
 
-add_executable(testT src/test/hello_test.cpp  src/test/testHarversine.cpp )
-target_link_libraries(testT PRIVATE GTest::gtest_main SQLite::SQLite3)
-target_include_directories(testT PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+)
+target_link_libraries(tsp_core PUBLIC SQLite::SQLite3)
+target_include_directories(tsp_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+add_executable(main src/main.cpp)
+target_link_libraries(main PRIVATE tsp_core)
+
+add_executable(testT 
+    src/test/hello_test.cpp  
+    src/test/testHarversine.cpp 
+    src/test/testSolution.cpp
+)
+target_link_libraries(testT PRIVATE tsp_core GTest::gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(testT)
