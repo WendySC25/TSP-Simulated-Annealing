@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "../tsp/core/SolutionTCP.hpp"
+#include "../tsp/core/SolutionTSP.hpp"
 #include "../tsp/db/CityDatabase.hpp"
 #include "tsp/core/EnvironmentTSP.hpp"
 
@@ -22,7 +22,7 @@ TEST(SolutionTest, tsp40) {
     int n = ids.size();
     std::vector<int> path(n);
     std::iota(path.begin(), path.end(), 0);
-    SolutionTCP s(path, env.getMatrix(), env.getNormalizer(), 25);
+    SolutionTSP s(path, env.getMatrix(), env.getNormalizer(), 25);
 
     EXPECT_NEAR(maxD, env.getMaxDS(), 1e-9);
     EXPECT_NEAR(normalizer, env.getNormalizer(), 1e-9);
@@ -48,7 +48,7 @@ TEST(SolutionTest, tsp150) {
     int n = ids.size();
     std::vector<int> path(n);
     std::iota(path.begin(), path.end(), 0);
-    SolutionTCP s(path, env.getMatrix(), env.getNormalizer(), 25);
+    SolutionTSP s(path, env.getMatrix(), env.getNormalizer(), 25);
 
     EXPECT_NEAR(maxD, env.getMaxDS(), 1e-9);
     EXPECT_NEAR(normalizer, env.getNormalizer(), 1e-9);
