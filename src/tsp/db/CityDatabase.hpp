@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "../model/City.hpp"
-#include "../utils/Haversine.hpp"
+#include "../model/Connection.hpp"
 
 class CityDatabase {
 
@@ -14,6 +14,6 @@ class CityDatabase {
 
     public:
         CityDatabase(const std::string& db_path);
-        std::vector<std::unique_ptr<City> > getCities(const std::vector<int>& ids);
-        std::vector<std::vector<double> >   getAdjMatrix(const std::vector<int>& ids);
+        std::vector<City>       getCities(const std::vector<int>& ids);
+        std::vector<Connection> getConnections(const std::vector<int>& ids);
 };      

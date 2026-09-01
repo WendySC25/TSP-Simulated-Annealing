@@ -13,10 +13,10 @@ CityDatabase::CityDatabase(const std::string& db_path) : db(nullptr, sqlite3_clo
     db.reset(ppDb);
 }
 
-std::vector<std::unique_ptr<City> > CityDatabase::getCities(const std::vector<int>& ids) {
+std::vector<City> CityDatabase::getCities(const std::vector<int>& ids) {
 
-    std::vector<std::unique_ptr<City> > cities;
-    cities.reserve(ids.size()+1);
+    std::vector<City> cities;
+    cities.reserve(ids.size());
     
     const char* query = "SELECT id, name, latitude, longitude FROM cities WHERE id = ?";
 
@@ -34,7 +34,7 @@ std::vector<std::unique_ptr<City> > CityDatabase::getCities(const std::vector<in
             std::string name = reinterpret_cast<const char*>(sqlite3_column_text(stmt.get(), 1));
             double lat = sqlite3_column_double(stmt.get(), 2);
             double lon = sqlite3_column_double(stmt.get(), 3);
-            cities.push_back(std::make_unique<City>(id, name, lat, lon));
+            cities.emplace_back(id, name, lat, lon);
         }         
         sqlite3_reset(stmt.get());
     }
@@ -42,18 +42,9 @@ std::vector<std::unique_ptr<City> > CityDatabase::getCities(const std::vector<in
     return cities;
 }
 
-std::vector<std::vector<double> > CityDatabase::getAdjMatrix(const std::vector<int>& ids) {
+std::vector<Connection> CityDatabase::getConnections(const std::vector<int>& ids) {
     
-    int n = ids.size();
-    std::vector<std::vector<double> > matrix(n, std::vector<double>(n, -1.0));
-    std::vector<std::unique_ptr<City> > cities = getCities(ids);
-    std::unordered_map<int, int> idToIndex;
-    
-    for (int i = 0; i < n; ++i) {
-        matrix[i][i] = 0.0;
-        idToIndex[cities[i]->id] = i;
-    }
-    
+    std::vector<Connection> connections;
     const char* query = "SELECT id_city_2, distance FROM connections WHERE id_city_1 = ?";
 
     sqlite3_stmt* ppStmt = nullptr;
@@ -61,38 +52,19 @@ std::vector<std::vector<double> > CityDatabase::getAdjMatrix(const std::vector<i
         throw std::runtime_error("Error with connection table");
         
     std::unique_ptr<sqlite3_stmt, decltype(&sqlite3_finalize)> stmt(ppStmt, sqlite3_finalize);
-    double maxDS = -1e9; // QUÉ PASA SI NO HAY NINGUNA SOLUCIÓN FACTIBLE?
     
-    for(int i = 0; i < n; ++i) {
-        sqlite3_bind_int(stmt.get(), 1, ids[i]);
+    for(int id1 : ids) {
+        sqlite3_bind_int(stmt.get(), 1, id1);
+        
         while (sqlite3_step(stmt.get()) == SQLITE_ROW) {
-            int idFinal = sqlite3_column_int(stmt.get(), 0);
-            auto it = idToIndex.find(idFinal);
-            if (it != idToIndex.end()) {
-                int j = it->second;
-                double dist = sqlite3_column_double(stmt.get(), 1);
-                matrix[i][j] = dist;
-                matrix[j][i] = dist;
-                if (dist > maxDS) maxDS = dist;
-            } else {
-                std::cout << "Hmmmm ..." << std::endl;
-            }
+            int id2 = sqlite3_column_int(stmt.get(), 0); 
+            double d = sqlite3_column_double(stmt.get(), 1); 
+
+            connections.emplace_back(id1, id2, d);
         }
         sqlite3_reset(stmt.get());
     }
-    
-    if(maxDS == -1e9) maxDS = R; 
-    std::cout << "DisMax" << maxDS << std::endl;
-    
-    for(int i = 0; i < n; ++i) {
-        for (int j = 0; j < n; ++j) {
-            if (matrix[i][j] < 0.0) {
-                double dist = getNaturalDistance(cities[i]->latitude, cities[i]->longitude, cities[j]->latitude, cities[j]->longitude);
-                matrix[i][j] = dist * maxDS;
-            }
-        }
-    }
-            
-    return matrix;
+
+    return connections;
 }
 
