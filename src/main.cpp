@@ -6,6 +6,7 @@
 #include "tsp/db/CityDatabase.hpp"
 #include "tsp/core/SolutionTSP.hpp"
 #include "tsp/core/EnvironmentTSP.hpp"
+#include "tsp/heuristic/InitialTemperature.cpp"
 
 using namespace std;
 
@@ -25,7 +26,9 @@ int main() {
         EnvironmentTSP env(cities, connections);
         SolutionTSP s(ids, env.getMatrix(), env.getNormalizer(), 25);
 
-
+        InitialTemperature temp(0.01,0.95,8,100);
+        cout << temp.computeInitialT(s) << endl;
+        
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';
         return 1;
