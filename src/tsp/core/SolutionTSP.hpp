@@ -19,6 +19,9 @@ class SolutionTSP : public Solution {
         int jP;
         double costP;
 
+        std::vector<int> bestPath;
+        double           bestSavedCost;
+
         void generateSolution(){
             path.resize(n);
             for(int i = 0; i < n; i++) path[i] = i; 
@@ -34,5 +37,11 @@ class SolutionTSP : public Solution {
         double proposeNeightborhCost() override;
         void acceptPropose() override;
         double evaluate() override;
+        std::string toString() override;
+
+        void saveBest() override;
+        void restoreBest() override;
+
+        bool isFactible();
 
 };

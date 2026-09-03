@@ -33,7 +33,7 @@ double SolutionTSP::evaluate(){
     for(int i = 1; i < n; i++) 
         acc += matrix[path[i]][path[i-1]];
     
-    return cost = acc /normalizer;
+    return cost = acc / normalizer;
  }
 
 double SolutionTSP::getSwapCost(int i, int j){
@@ -74,9 +74,34 @@ double SolutionTSP::getSwapCost(int i, int j){
     }
     
     delta = (neww - old) / normalizer;
-    return cost + delta;
+    costP = cost + delta;
+    return costP;
 }
 
 std::vector<int> SolutionTSP::getPath(){
     return path;
-  }
+}
+
+std::string SolutionTSP::toString() {
+    std::string s;
+    for(auto i : path) {
+        s.append(std::to_string(i));
+        s.append(", ");
+    }
+    s.append("\n");
+    return s;
+}
+
+void SolutionTSP::saveBest(){
+    bestPath = path;
+    bestSavedCost = cost;
+}
+
+void SolutionTSP::restoreBest(){
+    path = bestPath;
+    cost = bestSavedCost;
+}
+
+bool SolutionTSP::isFactible(){
+    return cost > 1.0;
+}
