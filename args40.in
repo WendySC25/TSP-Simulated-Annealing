@@ -1,0 +1,11 @@
+-db data/db/tsp.db
+-instance data/inputs/input-40.tsp
+-seed 78
+-targetP 0.95
+-epsilonP 0.01
+-initialT 8
+-tempSample 2000
+-coolingFactor 0.9
+-epsilon 0.001
+-batchSize 2000
+-maxAttempts 40
