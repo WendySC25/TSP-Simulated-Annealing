@@ -27,7 +27,7 @@ double InitialTemperature::computeInitialT(Solution &s){
         T2 = T*2;
     }
 
-    return binarySerchT(s,T1,T2, P);
+    return binarySerchT(s,T1,T2);
 }
 
 double InitialTemperature::calculateAcceptanceRate(Solution &s, double T){
@@ -46,7 +46,7 @@ double InitialTemperature::calculateAcceptanceRate(Solution &s, double T){
     return static_cast<double>(acc) / static_cast<double>(N);
 }
 
-double InitialTemperature::binarySerchT(Solution &s, double T1, double T2, double P){
+double InitialTemperature::binarySerchT(Solution &s, double T1, double T2){
     
     double Tm = (T1+T2)/2.0;
     if(T2 - T1 < epsilonP) return Tm;
@@ -54,7 +54,7 @@ double InitialTemperature::binarySerchT(Solution &s, double T1, double T2, doubl
     double p = calculateAcceptanceRate(s, Tm);
     if(std::fabs(P-p) < epsilonP) return Tm;
 
-    if(p > P) return binarySerchT(s,T1,Tm,P);
-    else return binarySerchT(s,Tm,T2, P);
+    if(p > P) return binarySerchT(s,T1,Tm);
+    else return binarySerchT(s,Tm,T2);
 
 }

@@ -1,17 +1,18 @@
+#include "tsp/core/Solution.hpp"
+#include <limits>
+#include<iostream>
 
 class SimulatedAnnealing{
 private:
-    /* data */
     double coolingFactor;
     double epsilon;
-    double batch;
-
+    int    batch;
+    int    ATTEMPS;
 
 public:
-    SimulatedAnnealing(/* args */);
+    SimulatedAnnealing(double cf, double e, int b, int n);
     ~SimulatedAnnealing();
 
-    int run(){
-        
-    }
+    void run(double T, Solution &s);
+    double calculateBatch(double T, Solution &s);
 };
