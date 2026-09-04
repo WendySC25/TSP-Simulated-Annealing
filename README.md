@@ -18,6 +18,6 @@ ctest --test-dir build
 
 Run:
 ```
-./build/main
+./build/main $(cat args.in)
 ```
 
