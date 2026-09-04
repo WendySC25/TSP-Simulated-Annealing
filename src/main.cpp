@@ -3,32 +3,41 @@
 #include "tsp/model/City.hpp"
 #include "tsp/model/Connection.hpp"
 #include "tsp/io/FileReader.hpp"
+#include "tsp/io/Args.hpp"
 #include "tsp/db/CityDatabase.hpp"
 #include "tsp/core/SolutionTSP.hpp"
 #include "tsp/core/EnvironmentTSP.hpp"
-#include "tsp/heuristic/InitialTemperature.cpp"
+#include "tsp/heuristic/InitialTemperature.hpp"
+#include "tsp/heuristic/SimulatedAnnealing.hpp"
 
-using namespace std;
-
-int main() {
+int main(int argc, char** argv) {
     try {
+        auto optsOpt = parseArgs(argc, argv);
+        if (!optsOpt) {
+            std::cout << "Ups ..." << std::endl;
+            return 1;
+        }
+        const Args opts = *optsOpt;
 
-        // Temporalmente ...
-        std::string dir = "/Users/wendysc/Desktop/E/Ciencias/Semestre7/HDCO/TSP-Simulated-Annealing/data/inputs/input-40.tsp";
-        std::vector<int> ids = readFile(dir);
+        std::vector<int> ids = readFile(opts.instancePath);
 
-        // Temporalmente ...
-        std::string database = "/Users/wendysc/Desktop/E/Ciencias/Semestre7/HDCO/TSP-Simulated-Annealing/data/db/tsp.db";
-        CityDatabase db(database);
-        std::vector<City> cities = db.getCities(ids);
+        CityDatabase db(opts.dbPath);
+        std::vector<City>       cities = db.getCities(ids);
         std::vector<Connection> connections = db.getConnections(ids);
 
         EnvironmentTSP env(cities, connections);
-        SolutionTSP s(ids, env.getMatrix(), env.getNormalizer(), 25);
+        InitialTemperature temp(opts.epsilonP, opts.targetP, opts.initialT, opts.tempSample);
+        SimulatedAnnealing sa(opts.coolingFactor, opts.epsilon, opts.batchSize, opts.maxAttempts); 
+        SolutionTSP s(ids, env.getMatrix(), env.getNormalizer(), opts.seed);
 
-        InitialTemperature temp(0.01,0.95,8,100);
-        cout << temp.computeInitialT(s) << endl;
-        
+        double ti = temp.computeInitialT(s);
+        sa.run(ti, s);
+        double finalCost = s.getCost();
+
+        std::cout << "Semilla: " << opts.seed << std::endl;
+        std::cout << "Mejor costo: " << finalCost << std::endl;
+        std::cout << "Sol: " << s.toString() << std::endl; // Ay! Lon índices xd
+
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << '\n';
         return 1;

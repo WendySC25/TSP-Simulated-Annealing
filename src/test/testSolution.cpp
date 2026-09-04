@@ -44,7 +44,7 @@ TEST(SolutionTest, tsp150) {
     EnvironmentTSP env(cities, connections);
 
     int n = ids.size();
-    SolutionTSP s(ids, env.getMatrix(), env.getNormalizer(), 25);
+    SolutionTSP s(ids, env.getMatrix(), env.getNormalizer(), 1);
 
     EXPECT_NEAR(maxD, env.getMaxDS(), 1e-9);
     EXPECT_NEAR(normalizer, env.getNormalizer(), 1e-9);

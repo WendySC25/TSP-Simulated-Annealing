@@ -6,11 +6,11 @@ class SimulatedAnnealing{
 private:
     double coolingFactor;
     double epsilon;
-    int    batch;
-    int    ATTEMPS;
+    int    batchSize;
+    int    maxAttemps;
 
 public:
-    SimulatedAnnealing(double cf, double e, int b, int n);
+    SimulatedAnnealing(double coolingFactor, double epsilon, int batch, int attemps);
     ~SimulatedAnnealing();
 
     void run(double T, Solution &s);

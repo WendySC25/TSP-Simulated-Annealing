@@ -1,7 +1,7 @@
 #include "InitialTemperature.hpp"
 
-InitialTemperature::InitialTemperature(double e, double p, double t, int n)
-: epsilonP(e), P(p), initialT(t), N(n) {}
+InitialTemperature::InitialTemperature(double epsilon, double acceptanceRate, double initT, int sampleSize)
+: epsilonP(epsilon), P(acceptanceRate), initialT(initT), N(sampleSize) {}
 
 InitialTemperature::~InitialTemperature(){}
 

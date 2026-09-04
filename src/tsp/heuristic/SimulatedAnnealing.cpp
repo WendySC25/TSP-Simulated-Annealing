@@ -1,8 +1,8 @@
 #include "SimulatedAnnealing.hpp"
 
-SimulatedAnnealing::SimulatedAnnealing(double cf, double e, int b, int n)
-: coolingFactor(cf), epsilon(e), batch(b){
-    ATTEMPS = n*n*2; 
+SimulatedAnnealing::SimulatedAnnealing(double coolingFactor, double epsilon, int batch, int attemps)
+: coolingFactor(coolingFactor), epsilon(epsilon), batchSize(batch){
+    maxAttemps = attemps * attemps * 2;
 }
 
 SimulatedAnnealing::~SimulatedAnnealing(){}
@@ -42,7 +42,7 @@ double SimulatedAnnealing::calculateBatch(double T, Solution &s){
     int c = 0;
     double r = 0.0;
     int attemps = 0;
-    while(c < batch && attemps < ATTEMPS){
+    while(c < batchSize && attemps < maxAttemps){
         attemps++;
         double currentCost = s.getCost();
         double neightborhCost = s.proposeNeightborhCost();

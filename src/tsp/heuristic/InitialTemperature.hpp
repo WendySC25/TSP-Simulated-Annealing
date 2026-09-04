@@ -5,10 +5,10 @@ class InitialTemperature{
         double epsilonP;
         double P;
         double initialT; 
-        int    N = 100;
+        int    N;
 
     public:
-        InitialTemperature(double e, double p, double t, int n);
+        InitialTemperature(double epsilon, double acceptanceRate, double initT, int sampleSize);
         ~InitialTemperature();
 
         double binarySerchT(Solution &s, double T1, double T2);
