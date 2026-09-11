@@ -16,6 +16,16 @@ std::string ExperimentReporter::csvField(const std::string &raw){
     return escaped;
 }
 
+std::string ExperimentReporter::joinPath(const std::vector<int> &path){
+
+    std::ostringstream oss;
+    for(size_t i = 0; i < path.size(); ++i){
+      if(i) oss << ';';
+      oss << path[i];
+    }
+    return oss.str();
+}
+
 void ExperimentReporter::generateReportCSV(const std::string &filepath, const std::vector<RunResult> &results){
     
     std::ofstream out(filepath);
@@ -43,6 +53,6 @@ void ExperimentReporter::generateReportCSV(const std::string &filepath, const st
                 << r.finalCost << ','
                 << r.elapsedMs << ','
                 << csvField(r.timestamp) << ','
-                << csvField(r.finalPath) << '\n';                                               
+                << csvField(joinPath(r.finalPath)) << '\n';                                               
     }           
 }

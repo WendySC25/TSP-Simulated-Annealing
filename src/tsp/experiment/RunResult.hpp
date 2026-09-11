@@ -3,7 +3,7 @@
 
 struct RunResult {
     RunConfig   config;
-    std::string finalPath;   
+    std::vector<int> finalPath;   
     std::string timestamp;   
 
     double    initialCost        = 0.0;   

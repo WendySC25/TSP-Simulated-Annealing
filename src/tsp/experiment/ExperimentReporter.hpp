@@ -8,6 +8,7 @@
 class ExperimentReporter {
     private:
         std::string csvField(const std::string &raw);
+        std::string joinPath(const std::vector<int> &path);
 
     public:
         ExperimentReporter();

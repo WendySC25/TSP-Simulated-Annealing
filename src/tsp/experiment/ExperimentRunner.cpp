@@ -34,7 +34,7 @@ RunResult ExperimentRunner::runOne(const RunConfig &cfg){
     SimulatedAnnealing sa(cfg.coolingFactor, cfg.epsilon, cfg.batch, cfg.maxAttempts);
     sa.run(T, s);
     result.finalCost = s.getCost();
-    result.finalPath = s.toString();
+    result.finalPath = s.getPath();
     
     auto end = std::chrono::steady_clock::now();
     result.elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
@@ -78,7 +78,7 @@ std::vector<RunConfig> ExperimentRunner::assignSeeds(int numSeeds, const RunConf
     
     for(int i = 0; i < numSeeds; i++) {
         RunConfig cfg = baseCofig;
-        cfg.seed = i;
+        cfg.seed += i;
         configs.push_back(cfg);
     }
     
