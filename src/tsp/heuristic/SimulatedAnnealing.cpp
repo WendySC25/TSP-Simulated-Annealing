@@ -50,6 +50,8 @@ double SimulatedAnnealing::calculateBatch(double T, Solution &s){
             c++;
             r += neightborhCost;
             s.acceptPropose();
+
+            std::cout << neightborhCost << "\n";
         }   
     }
 

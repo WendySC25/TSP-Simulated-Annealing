@@ -78,7 +78,7 @@ std::vector<RunConfig> ExperimentRunner::assignSeeds(int numSeeds, const RunConf
     
     for(int i = 0; i < numSeeds; i++) {
         RunConfig cfg = baseCofig;
-        cfg.seed += i;
+        cfg.seed = i + cfg.seed;
         configs.push_back(cfg);
     }
     

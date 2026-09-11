@@ -8,19 +8,19 @@ struct Args {
     std::string dbPath;
     std::string instancePath;
 
-    int     seed = 12;
+    int     seed = 9695;
 
     // Initial Temperature parameters
     double  targetP = 0.95;
-    double  epsilonP = 0.01;
+    double  epsilonP = 0.00001;
     double  initialT = 8.0;
-    int     tempSample = 500;
+    int     tempSample = 5000;
 
     // Simulated Annealing
-    int     batchSize = 500;       
+    int     batchSize = 5000;       
     int     maxAttempts = 150;
     double  coolingFactor = 0.97;
-    double  epsilon = 0.001;
+    double  epsilon = 0.00001;
 };
 
 enum class ArgOption {
