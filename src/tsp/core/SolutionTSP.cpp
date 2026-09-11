@@ -88,7 +88,7 @@ std::string SolutionTSP::toString() {
     std::string s;
     for(auto i : path) {
         s.append(std::to_string(i));
-        s.append(", ");
+        s.append("-");
     }
     s.append("\n");
     return s;

@@ -1,11 +1,10 @@
 #pragma once
-#include <vector>
 #include "RunConfig.hpp"
 
 struct RunResult {
-    RunConfig        config;
-    std::vector<int> finalPath;   
-    std::string      timestamp;   
+    RunConfig   config;
+    std::string finalPath;   
+    std::string timestamp;   
 
     double    initialCost        = 0.0;   
     double    initialTemperature = 0.0;

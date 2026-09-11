@@ -34,7 +34,7 @@ RunResult ExperimentRunner::runOne(const RunConfig &cfg){
     SimulatedAnnealing sa(cfg.coolingFactor, cfg.epsilon, cfg.batch, cfg.maxAttempts);
     sa.run(T, s);
     result.finalCost = s.getCost();
-    result.finalPath = s.getPath();
+    result.finalPath = s.toString();
     
     auto end = std::chrono::steady_clock::now();
     result.elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
