@@ -5,12 +5,14 @@ SolutionTSP::SolutionTSP(const std::vector<int> &ids, const std::vector<std::vec
     path.resize(n);
     for(int i = 0; i < n; i++) path[i] = i; 
     evaluate();
+    saveBest();
 }
 
 SolutionTSP::SolutionTSP(const std::vector<std::vector<double> > & matrix, double normalizer, int seed) 
 : matrix(matrix), normalizer(normalizer), n(matrix.size()), rd(seed), uniform(0,n-1){
     generateSolution();
     evaluate();
+    saveBest();
 }
 
 
@@ -103,5 +105,5 @@ void SolutionTSP::restoreBest(){
 }
 
 bool SolutionTSP::isFactible(){
-    return cost > 1.0;
+    return cost <= 1.0;
 }
