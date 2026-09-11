@@ -1,5 +1,19 @@
 #include "ExperimentRunner.hpp"
 
+std::string ExperimentRunner::nowTimestamp(){
+    auto noww = std::chrono::system_clock::now();
+    std::time_t t = std::chrono::system_clock::to_time_t(noww);
+    std::tm tmBuf;
+    #if defined(_WIN32)
+        localtime_s(&tmBuf, &t);
+    #else
+        localtime_r(&t, &tmBuf);
+    #endif
+    std::ostringstream oss;
+    oss << std::put_time(&tmBuf, "%Y-%m-%dT%H:%M:%S");
+    return oss.str();
+}
+
 ExperimentRunner::ExperimentRunner(const std::vector<std::vector<double> > &matrix, double normalizer, int numThreads)
 : matrix(matrix), normalizer(normalizer), numThreads(numThreads > 0 ? numThreads : std::max(1u, std::thread::hardware_concurrency())) {}
 
