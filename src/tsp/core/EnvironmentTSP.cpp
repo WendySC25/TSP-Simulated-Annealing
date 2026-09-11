@@ -1,15 +1,18 @@
 #include "EnvironmentTSP.hpp"
 
-EnvironmentTSP::EnvironmentTSP(const std::vector<City>& cities, const std::vector<Connection>& connetions) : n (cities.size()){
-    n = cities.size();
-    matrix.assign(n, std::vector<double>(n, -1.0));
+
+EnvironmentTSP::EnvironmentTSP(const std::vector<City>& cities, const std::vector<Connection>& connetions) 
+: indexCities(const_cast<std::vector<City>&>(cities)), n(cities.size()){
     
+    matrix.assign(n, std::vector<double>(n, -1.0));
     std::vector<double> distances;
     distances.reserve(connetions.size());
+    indexToId.resize(n);
 
     for (int i = 0; i < n; ++i) {
         matrix[i][i] = 0.0;
         idToIndex[cities[i].id] = i;
+        indexToId[i] = cities[i].id;
     }
 
     maxDS = -1e9;
@@ -69,4 +72,26 @@ double EnvironmentTSP::getNormalizer() const{
 
 double EnvironmentTSP::getMaxDS() const{
     return maxDS;
+}
+
+std::vector<int> EnvironmentTSP::getPathIds(const std::vector<int>& path) const {
+
+    std::vector<int> ids;
+    ids.reserve(path.size());
+
+    for (int id : path) 
+        ids.push_back(indexToId[id]);
+    
+    return ids;
+}
+
+std::vector<std::pair<double, double> > EnvironmentTSP::getPathCoords(const std::vector<int>& path) const {
+
+    std::vector<std::pair<double, double> > coords;
+    coords.reserve(path.size());
+
+    for (int idx : path) 
+        coords.emplace_back(indexCities[idx].longitude, indexCities[idx].latitude);
+
+    return coords;
 }
