@@ -2,7 +2,7 @@
 #include <string>
 
 struct RunConfig {
-    std::string label;
+    std::string label = "";
     int         seed;
 
     // Initial Temperature parameters

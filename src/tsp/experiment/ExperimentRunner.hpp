@@ -19,6 +19,7 @@ class ExperimentRunner {
         double normalizer;
         int    numThreads;
         
+        std::string nowTimestamp();
         RunResult runOne(const RunConfig &cfg);
         void worker(const std::vector<RunConfig> &configs, std::vector<RunResult> &results, size_t begin, size_t end);
 

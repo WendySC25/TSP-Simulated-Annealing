@@ -8,7 +8,7 @@ RunResult ExperimentRunner::runOne(const RunConfig &cfg){
     
     RunResult result;
     result.config = cfg;
-    result.timestamp = "nowwww";
+    result.timestamp = nowTimestamp();
 
     SolutionTSP s(matrix, normalizer, cfg.seed);
     result.initialCost = s.getCost();
@@ -46,12 +46,11 @@ std::vector<RunResult> ExperimentRunner::run(const std::vector<RunConfig> &confi
     size_t total = configs.size();
     size_t chunk = (total + threadsToUse - 1) / threadsToUse;
     
-    for(unsigned int t = 0; t < threadsToUse; ++t){
+    for(unsigned int t = 0; t < threadsToUse; t++){
         size_t begin = t * chunk;
         size_t end = std::min(total, begin + chunk);
         if(begin >= end) 
             break;
-            
         pool.emplace_back(&ExperimentRunner::worker, this, std::cref(configs), std::ref(results), begin, end);
     }
     
