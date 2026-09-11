@@ -1,16 +1,49 @@
 #include "CityDatabase.hpp"
 
-CityDatabase::CityDatabase(const std::string& db_path) : db(nullptr, sqlite3_close) {
+static std::string readSqlFile(const std::string& path) {
+    std::ifstream file(path);
+    if (!file.is_open()) 
+        throw std::runtime_error("Oh noo sql: " + path);
+    
+    std::ostringstream ss;
+    ss << file.rdbuf();
+    return ss.str();
+}
+
+CityDatabase::CityDatabase(const std::string& sql_path, const std::string& db_path)
+: db(nullptr, sqlite3_close) {
+
+    std::string finalDbPath = db_path;
+    if (finalDbPath.empty()) {
+        std::filesystem::path p(sql_path);
+        p.replace_extension(".db");
+        finalDbPath = p.string();
+    }
+
+    bool dbAlreadyExists = std::filesystem::exists(finalDbPath) && std::filesystem::file_size(finalDbPath) > 0;
 
     sqlite3* ppDb = nullptr;
-    
-    if (sqlite3_open(db_path.c_str(), &ppDb) != SQLITE_OK) {
+    if (sqlite3_open(finalDbPath.c_str(), &ppDb) != SQLITE_OK) {
         std::string err = sqlite3_errmsg(ppDb);
         sqlite3_close(ppDb);
         throw std::runtime_error("DB error: " + err);
     }
 
     db.reset(ppDb);
+
+    if (!dbAlreadyExists) {
+        std::string sqlScript = readSqlFile(sql_path);
+
+        char* errMsg = nullptr;
+        int rc = sqlite3_exec(db.get(), sqlScript.c_str(), nullptr, nullptr, &errMsg);
+        if (rc != SQLITE_OK) {
+            std::string err = errMsg ? errMsg : "error on script SQL";
+            sqlite3_free(errMsg);
+            db.reset();
+            std::filesystem::remove(finalDbPath);
+            throw std::runtime_error("Error with script .sql: " + err);
+        }
+    }
 }
 
 std::vector<City> CityDatabase::getCities(const std::vector<int>& ids) {
