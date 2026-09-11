@@ -33,7 +33,6 @@ RunResult ExperimentRunner::runOne(const RunConfig &cfg){
     
     SimulatedAnnealing sa(cfg.coolingFactor, cfg.epsilon, cfg.batch, cfg.maxAttempts);
     sa.run(T, s);
-    
     result.finalCost = s.getCost();
     result.finalPath = s.getPath();
     
@@ -70,5 +69,19 @@ std::vector<RunResult> ExperimentRunner::run(const std::vector<RunConfig> &confi
     
     for(auto &th : pool) th.join();
     return results;
+}
+
+std::vector<RunConfig> ExperimentRunner::assignSeeds(int numSeeds, const RunConfig &baseCofig){
+    
+    std::vector<RunConfig> configs;
+    configs.reserve(numSeeds);
+    
+    for(int i = 0; i < numSeeds; i++) {
+        RunConfig cfg = baseCofig;
+        cfg.seed = i;
+        configs.push_back(cfg);
+    }
+    
+    return configs;
 }
 

@@ -26,4 +26,6 @@ class ExperimentRunner {
     public:
         ExperimentRunner(const std::vector<std::vector<double> > &matrix, double normalizer, int numThreads = 0);
         std::vector<RunResult> run(const std::vector<RunConfig> &configs);
+        
+        static std::vector<RunConfig> assignSeeds(int numSeeds, const RunConfig &baseCofig);
 };
