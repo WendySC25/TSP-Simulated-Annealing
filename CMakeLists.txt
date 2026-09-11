@@ -23,6 +23,7 @@ add_library(tsp_core
     src/tsp/core/SolutionTSP.cpp
     src/tsp/heuristic/InitialTemperature.cpp
     src/tsp/heuristic/SimulatedAnnealing.cpp
+    src/tsp/experiment/ExperimentRunner.cpp
 )
 target_link_libraries(tsp_core PUBLIC SQLite::SQLite3)
 target_include_directories(tsp_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)

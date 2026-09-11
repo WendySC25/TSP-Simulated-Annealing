@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <memory>
 
 #include "../model/City.hpp"
 #include "../model/Connection.hpp"

@@ -1,3 +1,4 @@
+#pragma once
 #include "tsp/core/Solution.hpp"
 #include <limits>
 #include<iostream>
