@@ -35,7 +35,7 @@ RunResult ExperimentRunner::runOne(const RunConfig &cfg){
     sa.run(T, s);
     result.finalCost = s.getCost();
     result.finalPath = s.getPath();
-    
+
     auto end = std::chrono::steady_clock::now();
     result.elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
     
@@ -85,3 +85,32 @@ std::vector<RunConfig> ExperimentRunner::assignSeeds(int numSeeds, const RunConf
     return configs;
 }
 
+std::vector<RunConfig> ExperimentRunner::generateRandomConfigs(int numExperiments, const RunConfig &baseConfig) {
+    std::vector<RunConfig> configs;
+    configs.reserve(numExperiments);
+
+    std::random_device rd;
+    std::mt19937 gen(rd()); 
+
+    std::uniform_int_distribution<int> distTargetP(7000, 9500); // 0.7000 a 0.9500
+    std::uniform_int_distribution<int> distCooling(8500, 9800); // 0.8500 a 0.9800
+    std::uniform_int_distribution<int> distBatch(1000, 5000);
+    std::uniform_int_distribution<int> distTempSample(1000, 5000);
+    std::uniform_int_distribution<int> distMaxAttempts(50, 200);
+
+    for (int i = 0; i < numExperiments; i++) {
+        RunConfig cfg = baseConfig;
+        cfg.seed = baseConfig.seed + i; 
+        cfg.targetP = distTargetP(gen) / 10000.0;
+        cfg.coolingFactor = distCooling(gen) / 10000.0;
+        cfg.batch = distBatch(gen);
+        cfg.tempSample = distTempSample(gen);
+        cfg.maxAttempts = distMaxAttempts(gen);
+
+        cfg.label = "random_" + std::to_string(i);
+        
+        configs.push_back(cfg);
+    }
+    
+    return configs;
+}

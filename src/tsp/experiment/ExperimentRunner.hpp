@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <string>
 #include <algorithm>
+#include <random>
 
 #include "RunConfig.hpp"
 #include "RunResult.hpp"
@@ -28,4 +29,5 @@ class ExperimentRunner {
         std::vector<RunResult> run(const std::vector<RunConfig> &configs);
         
         static std::vector<RunConfig> assignSeeds(int numSeeds, const RunConfig &baseCofig);
+        static std::vector<RunConfig> generateRandomConfigs(int numExperiments, const RunConfig &baseConfig);
 };
