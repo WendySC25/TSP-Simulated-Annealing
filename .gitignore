@@ -2,6 +2,7 @@
 .DS_Store?
 build/
 data/db
+data/output/CVS
 resultsMe/
 borrar/
 *.csv
