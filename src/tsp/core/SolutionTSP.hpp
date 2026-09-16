@@ -22,6 +22,8 @@ class SolutionTSP : public Solution {
         std::vector<int> bestPath;
         double           bestSavedCost;
 
+        bool useTwoOpt = true;
+
         void generateSolution(){
             path.resize(n);
             for(int i = 0; i < n; i++) path[i] = i; 
@@ -41,6 +43,8 @@ class SolutionTSP : public Solution {
 
         void saveBest() override;
         void restoreBest() override;
+    
+        double getTwoOptCost(int i, int j);
 
         bool isFactible();
 

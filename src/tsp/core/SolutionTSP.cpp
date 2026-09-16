@@ -21,12 +21,17 @@ double SolutionTSP::proposeNeightborhCost(){
     jP = uniform(rd);
 
     while(iP == jP) jP = uniform(rd);
-            
-    return getSwapCost(iP,jP);
+    if (iP > jP) std::swap(iP, jP);
+    
+    if(useTwoOpt) return getTwoOptCost(iP,jP);
+    else return getSwapCost(iP,jP);
 }
 
 void SolutionTSP::acceptPropose(){
-    std::swap(path[iP], path[jP]);
+    
+    if(useTwoOpt) std::reverse(path.begin() + iP, path.begin() + jP + 1);
+    else std::swap(path[iP], path[jP]);
+
     cost = costP;
 }
 
@@ -106,4 +111,29 @@ void SolutionTSP::restoreBest(){
 
 bool SolutionTSP::isFactible(){
     return cost <= 1.0;
+}
+
+double SolutionTSP::getTwoOptCost(int i, int j){
+    if (i == j) return cost;
+    if (i > j) std::swap(i, j);
+
+    double old  = 0.0;
+    double neww = 0.0;
+
+    int a = path[i]; 
+    int b = path[j];
+
+    if(i > 0){
+        old  += matrix[path[i-1]][a];
+        neww += matrix[path[i-1]][b];
+    }
+
+    if(j < n - 1){
+        old  += matrix[b][path[j+1]];
+        neww += matrix[a][path[j+1]];
+    }
+
+    double delta = (neww - old) / normalizer;
+    costP = cost + delta;
+    return costP;
 }
