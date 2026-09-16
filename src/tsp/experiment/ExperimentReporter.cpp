@@ -1,4 +1,6 @@
 #include "ExperimentReporter.hpp"
+#include <iomanip>
+#include <limits>
 
 ExperimentReporter::ExperimentReporter(){}
 ExperimentReporter::~ExperimentReporter(){}
@@ -31,6 +33,8 @@ void ExperimentReporter::generateReportCSV(const std::string &filepath, const st
     std::ofstream out(filepath);
     if(!out.is_open())
         throw std::runtime_error("Useless: " + filepath);
+
+    out << std::setprecision(std::numeric_limits<double>::max_digits10);
         
     out << "label,seed,epsilonP,targetP,initialT,tempSample,"
     << "coolingFactor,epsilon,batch,maxAttempts,"

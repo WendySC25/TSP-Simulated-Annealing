@@ -43,12 +43,10 @@ class SolutionTSP : public Solution {
 
         void saveBest() override;
         void restoreBest() override;
-
         void scanning() override;
     
         double getTwoOptCost(int i, int j);
 
         bool isFactible();
-        void scanning();
 
 };
