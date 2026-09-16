@@ -1,4 +1,5 @@
 #include "SimulatedAnnealing.hpp"
+#include <iomanip>
 
 SimulatedAnnealing::SimulatedAnnealing(double coolingFactor, double epsilon, int batch, int attemps)
 : coolingFactor(coolingFactor), epsilon(epsilon), batchSize(batch){
@@ -18,12 +19,9 @@ void SimulatedAnnealing::run(double T, Solution &s){
             q = p;
             p = calculateBatch(T,s);
 
-            if (p == 0) {
-                // Hmmmm, no lo sé
-                break; 
-            }
+            if (p == 0) break; 
             
-            double currentCost = s.getCost();
+            double currentCost = s.evaluate();
             if (currentCost < bestCost) {
                 bestCost = currentCost;
                 s.saveBest();
@@ -34,7 +32,9 @@ void SimulatedAnnealing::run(double T, Solution &s){
         T = T*coolingFactor;
     }
 
-    s.restoreBest();
+    s.restoreBest();   
+    s.scanning();
+    s.saveBest();  
 }
 
 
@@ -51,7 +51,8 @@ double SimulatedAnnealing::calculateBatch(double T, Solution &s){
             r += neightborhCost;
             s.acceptPropose();
 
-            std::cout << neightborhCost << "\n";
+            // std::cout << std::fixed << std::setprecision(15) << "E: " << neightborhCost<< std::endl;
+
         }   
     }
 
