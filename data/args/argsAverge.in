@@ -1,0 +1,11 @@
+-db data/db/tsp.sql
+-instance data/inputs/input-n.tsp
+-seed 1
+-targetP 0.8248
+-epsilonP 0.00001
+-initialT 8
+-tempSample ceil(n * 19.75)
+-coolingFactor 0.9158
+-epsilon 0.00001
+-batchSize ceil(n * 19.7)
+-maxAttempts ceil(n * 0.84)
