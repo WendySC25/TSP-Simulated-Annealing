@@ -137,3 +137,31 @@ double SolutionTSP::getTwoOptCost(int i, int j){
     costP = cost + delta;
     return costP;
 }
+
+void SolutionTSP::scanning(){
+    bool improved = true;
+    while(improved){
+        improved = false;
+        int bestI = -1, bestJ = -1;
+        double bestCost = cost;
+        
+        for(int i = 0; i < n - 1; i++){
+            for(int j = i + 1; j < n; j++){
+                double c = (useTwoOpt) ? getTwoOptCost(i, j) : getSwapCost(i,j);
+                if(c < bestCost){
+                    bestCost = c;
+                    bestI = i;
+                    bestJ = j;
+                }
+            }
+        }
+        
+        if(bestI != -1){
+            iP = bestI;
+            jP = bestJ;
+            costP = bestCost;
+            acceptPropose();
+            improved = true;
+        }
+    }
+}

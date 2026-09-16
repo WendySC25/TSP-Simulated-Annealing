@@ -13,6 +13,7 @@ class Solution {
 
         virtual void saveBest() = 0;
         virtual void restoreBest() = 0;
+        virtual void scanning() = 0;
   
         double getCost(){
             return cost;
