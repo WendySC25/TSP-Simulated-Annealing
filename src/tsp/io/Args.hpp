@@ -8,7 +8,7 @@
  * @brief Configuration parameters for the Simulated Annealing execution.
  */
 struct Args {
-/** Path to the SQLite database. */
+    /** Path to the SQLite database. */
     std::string dbPath;
     
     /** Path to the problem instance file. */
