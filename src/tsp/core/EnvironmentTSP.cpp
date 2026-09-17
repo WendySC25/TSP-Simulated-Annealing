@@ -1,6 +1,5 @@
 #include "EnvironmentTSP.hpp"
 
-
 EnvironmentTSP::EnvironmentTSP(const std::vector<City>& cities, const std::vector<Connection>& connetions) 
 : indexCities(const_cast<std::vector<City>&>(cities)), n(cities.size()){
     
@@ -53,7 +52,6 @@ EnvironmentTSP::EnvironmentTSP(const std::vector<City>& cities, const std::vecto
 
     for (int i = 0; i < edges; ++i) 
         normalizer += distances[i];
-    
     
     if (normalizer == 0.0) 
         normalizer = 1.0; 

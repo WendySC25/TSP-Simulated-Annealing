@@ -1,5 +1,5 @@
 #pragma once
-#include "tsp/core/Solution.hpp"
+#include "Solution.hpp"
 
 /**
  * @brief Computes the optimal initial temperature for Simulated Annealing.

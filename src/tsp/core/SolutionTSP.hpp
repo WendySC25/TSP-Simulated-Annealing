@@ -2,7 +2,7 @@
 #include<vector>
 #include<random>
 #include<algorithm>
-#include "Solution.hpp"
+#include "tsp/heuristic/Solution.hpp"
 
 /**
  * @brief Represents a specific solution for the Traveling Salesperson Problem (TSP).

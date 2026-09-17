@@ -25,12 +25,13 @@ add_library(tsp_core
     src/tsp/heuristic/SimulatedAnnealing.cpp
     src/tsp/experiment/ExperimentRunner.cpp
     src/tsp/experiment/ExperimentReporter.cpp
+    src/tsp/app/TSPApp.cpp
 )
 target_link_libraries(tsp_core PUBLIC SQLite::SQLite3)
 target_include_directories(tsp_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
-add_executable(main src/main.cpp)
-target_link_libraries(main PRIVATE tsp_core)
+add_executable(tsp_runner src/main.cpp)
+target_link_libraries(tsp_runner PRIVATE tsp_core)
 
 add_executable(testT 
     src/test/hello_test.cpp  

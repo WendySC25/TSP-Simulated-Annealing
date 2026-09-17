@@ -15,7 +15,6 @@ SolutionTSP::SolutionTSP(const std::vector<std::vector<double> > & matrix, doubl
     saveBest();
 }
 
-
 double SolutionTSP::proposeNeightborhCost(){
     iP = uniform(rd);
     jP = uniform(rd);
@@ -28,7 +27,7 @@ double SolutionTSP::proposeNeightborhCost(){
 }
 
 void SolutionTSP::acceptPropose(){
-    
+
     if(useTwoOpt) std::reverse(path.begin() + iP, path.begin() + jP + 1);
     else std::swap(path[iP], path[jP]);
 
