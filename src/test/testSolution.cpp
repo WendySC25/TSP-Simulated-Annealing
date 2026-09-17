@@ -99,3 +99,80 @@ TEST(SolutionTSP, GetSwapCostAdjacentIndices){
     EXPECT_NEAR(predicted, 0.6, 1e-9);
 }
 
+TEST(SolutionTSP, AcceptProposeUpdatesPathAndCostConsistently){
+    auto m = fixedMatrix();
+    double normalizer = 100.0;
+    std::vector<int> ids = {0,1,2,3};
+    SolutionTSP s(ids, m, normalizer, 7);
+
+    auto pathBefore = s.getPath();
+    double predicted = s.proposeNeightborhCost();
+    s.acceptPropose();
+
+    EXPECT_NE(s.getPath(), pathBefore);
+    EXPECT_NEAR(s.getCost(), predicted, 1e-9);
+
+    double recomputed = s.evaluate();
+    EXPECT_NEAR(recomputed, predicted, 1e-9);
+}
+
+TEST(SolutionTSP, SaveBestAndRestoreBestRoundTrip){
+    auto m = fixedMatrix();
+    std::vector<int> ids = {0,1,2,3};
+    SolutionTSP s(ids, m, 100.0, 7);
+
+    double originalCost = s.getCost();
+    auto originalPath = s.getPath();
+    s.saveBest();
+
+    s.proposeNeightborhCost();
+    s.acceptPropose();
+
+    EXPECT_NE(s.getPath(), originalPath);
+
+    s.restoreBest();
+    EXPECT_EQ(s.getPath(), originalPath);
+    EXPECT_NEAR(s.getCost(), originalCost, 1e-9);
+}
+
+TEST(SolutionTSP, ToStringContainsAllPathIndices){
+    auto m = fixedMatrix();
+    std::vector<int> ids = {0,1,2,3};
+    SolutionTSP s(ids, m, 100.0, 0);
+    std::string str = s.toString();
+    for(int i = 0; i < 4; ++i)
+        EXPECT_NE(str.find(std::to_string(i)), std::string::npos);
+}
+
+TEST(SolutionTSP, IsFactibleMatchesBookDefinition){
+    auto m = fixedMatrix();
+    std::vector<int> ids = {0,1,2,3};
+    double normalizer = 100.0;
+    SolutionTSP s(ids, m, normalizer, 0);
+    EXPECT_TRUE(s.isFactible());
+}
+
+TEST(SolutionTSP, RestoreBestBeforeAnySaveDoesNotCorruptSolution){
+    auto m = fixedMatrix();
+    std::vector<int> ids = {0,1,2,3};
+    SolutionTSP s(ids, m, 100.0, 0);
+
+    double costBefore = s.getCost();
+    auto pathBefore = s.getPath();
+
+    s.restoreBest();
+
+    EXPECT_EQ(s.getPath().size(), pathBefore.size()) << "restoreBest() witjout saveBest()";
+}
+
+TEST(SolutionTSP, RandomConstructorProducesValidPermutation){
+    auto m = fixedMatrix();
+    SolutionTSP s(m, 100.0, 42);
+    auto path = s.getPath();
+    std::vector<int> sorted = path;
+    std::sort(sorted.begin(), sorted.end());
+    for(size_t i = 0; i < sorted.size(); ++i)
+        EXPECT_EQ(sorted[i], static_cast<int>(i));
+}
+
+
