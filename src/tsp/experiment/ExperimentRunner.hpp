@@ -7,6 +7,7 @@
 #include <string>
 #include <algorithm>
 #include <random>
+#include <atomic>
 
 #include "RunConfig.hpp"
 #include "RunResult.hpp"
@@ -48,7 +49,7 @@ class ExperimentRunner {
          * @param begin Starting index for this thread.
          * @param end Ending index for this thread.
          */
-        void worker(const std::vector<RunConfig> &configs, std::vector<RunResult> &results, size_t begin, size_t end);
+        void worker(const std::vector<RunConfig> &configs, std::vector<RunResult> &results, size_t begin, size_t end, std::atomic<int>& completed);
 
     public:
         /**

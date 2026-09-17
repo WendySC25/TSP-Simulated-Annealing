@@ -42,14 +42,18 @@ RunResult ExperimentRunner::runOne(const RunConfig &cfg){
     return result;
 }
 
-void ExperimentRunner::worker(const std::vector<RunConfig> &configs, std::vector<RunResult> &results, size_t begin, size_t end){
-    for(size_t i = begin; i<end; i++)
+void ExperimentRunner::worker(const std::vector<RunConfig> &configs, std::vector<RunResult> &results, size_t begin, size_t end, std::atomic<int>& completed){
+    for(size_t i = begin; i<end; i++){
         results[i] = runOne(configs[i]);
+        completed++;
+    }
 }
 
 std::vector<RunResult> ExperimentRunner::run(const std::vector<RunConfig> &configs) {
     std::vector<RunResult> results(configs.size());
     if(configs.empty()) return results;
+
+    std::atomic<int> completed(0);
 
     int threadsToUse = std::min<int>(numThreads, static_cast<int>(configs.size()));
     
@@ -64,8 +68,16 @@ std::vector<RunResult> ExperimentRunner::run(const std::vector<RunConfig> &confi
         size_t end = std::min(total, begin + chunk);
         if(begin >= end) 
             break;
-        pool.emplace_back(&ExperimentRunner::worker, this, std::cref(configs), std::ref(results), begin, end);
+        pool.emplace_back(&ExperimentRunner::worker, this, std::cref(configs), std::ref(results), begin, end, std::ref(completed));
     }
+
+    
+    while (completed < configs.size()) {
+        std::cout << "\rCompleted: " << completed.load() << " / " << configs.size();
+        std::cout.flush(); 
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    }
+    std::cout << "\rExperiments completed: " << configs.size() << " / " << configs.size() << "\n\n";
     
     for(auto &th : pool) th.join();
     return results;
