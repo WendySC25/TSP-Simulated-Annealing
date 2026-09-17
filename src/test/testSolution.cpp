@@ -61,3 +61,12 @@ TEST(SolutionTest, tsp150) {
     EXPECT_NEAR(evaluation, s.getCost(), 1e-9);
 }
 
+TEST(SolutionTSP, SimplePathEvaluaction){
+    auto m = fixedMatrix();
+    double normalizer = 100.0;
+    std::vector<int> ids = {0,1,2,3};
+    
+    SolutionTSP s(ids, m, normalizer, 0);
+    double expected = (10.0 + 15.0 + 5.0) / normalizer;
+    EXPECT_NEAR(s.getCost(), expected, 1e-9);
+}
