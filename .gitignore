@@ -3,6 +3,7 @@
 build/
 data/db
 data/output/CVS
+data/output/evaluation
 resultsMe/
 borrar/
 *.csv
