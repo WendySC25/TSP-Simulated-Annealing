@@ -70,3 +70,32 @@ TEST(SolutionTSP, SimplePathEvaluaction){
     double expected = (10.0 + 15.0 + 5.0) / normalizer;
     EXPECT_NEAR(s.getCost(), expected, 1e-9);
 }
+
+TEST(SolutionTSP, GetSwapCostSameIndexReturnsCurrentCost){
+    auto m = fixedMatrix();
+    std::vector<int> ids = {0,1,2,3};
+    SolutionTSP s(ids, m, 100.0, 0);
+    double before = s.getCost();
+    EXPECT_DOUBLE_EQ(s.getSwapCost(2,2), before);
+}
+
+TEST(SolutionTSP, GetSwapCostPredictsCostOfSwappedPath){
+    auto m = fixedMatrix();
+    double normalizer = 100.0;
+    std::vector<int> ids = {0,1,2,3};
+    SolutionTSP s(ids, m, normalizer, 0);
+
+    double predicted = s.getSwapCost(1,3);
+    EXPECT_NEAR(predicted, 0.5, 1e-9);
+}
+
+TEST(SolutionTSP, GetSwapCostAdjacentIndices){
+    auto m = fixedMatrix();
+    double normalizer = 100.0;
+    std::vector<int> ids = {0,1,2,3};
+    SolutionTSP s(ids, m, normalizer, 0);
+
+    double predicted = s.getSwapCost(1,2);
+    EXPECT_NEAR(predicted, 0.6, 1e-9);
+}
+
