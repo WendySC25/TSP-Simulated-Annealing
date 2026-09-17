@@ -35,7 +35,8 @@ target_link_libraries(tsp_runner PRIVATE tsp_core)
 
 add_executable(testT 
     src/test/hello_test.cpp  
-    src/test/testHarversine.cpp 
+    src/test/testHarversine.cpp
+    src/test/testSolution.cpp 
 )
 target_link_libraries(testT PRIVATE tsp_core GTest::gtest_main)
 
