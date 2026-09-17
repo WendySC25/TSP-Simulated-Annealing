@@ -71,11 +71,12 @@ std::vector<RunResult> ExperimentRunner::run(const std::vector<RunConfig> &confi
         pool.emplace_back(&ExperimentRunner::worker, this, std::cref(configs), std::ref(results), begin, end, std::ref(completed));
     }
 
-    
-    while (completed < configs.size()) {
-        std::cout << "\rCompleted: " << completed.load() << " / " << configs.size();
-        std::cout.flush(); 
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    if(configs.size() > 1) {
+        while (completed < configs.size()) {
+            std::cout << "\rCompleted: " << completed.load() << " / " << configs.size();
+            std::cout.flush(); 
+            std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        }
     }
     std::cout << "\rExperiments completed: " << configs.size() << " / " << configs.size() << "\n\n";
     
