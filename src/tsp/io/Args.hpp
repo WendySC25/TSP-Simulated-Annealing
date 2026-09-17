@@ -4,25 +4,51 @@
 #include <optional>
 #include <unordered_map>
 
+/**
+ * @brief Configuration parameters for the Simulated Annealing execution.
+ */
 struct Args {
+/** Path to the SQLite database. */
     std::string dbPath;
+    
+    /** Path to the problem instance file. */
     std::string instancePath;
 
-    int     seed = 9695;
+    /** Random Number Generator (RNG) seed. */
+    int seed = 9695;
 
     // Initial Temperature parameters
-    double  targetP = 0.95;
-    double  epsilonP = 0.00001;
-    double  initialT = 8.0;
-    int     tempSample = 5000;
+
+    /** Target acceptance probability for initial temperature. */
+    double targetP = 0.95;
+    
+    /** Tolerance for the initial temperature search. */
+    double epsilonP = 0.00001;
+    
+    /** Starting temperature. */
+    double initialT = 8.0;
+    
+    /** Sample size for temperature initialization. */
+    int tempSample = 5000;
 
     // Simulated Annealing
-    int     batchSize = 5000;       
-    int     maxAttempts = 150;
-    double  coolingFactor = 0.97;
-    double  epsilon = 0.00001;
+
+    /** Number of iterations per temperature level. */
+    int batchSize = 5000;       
+    
+    /** Maximum temperature drops without improvement. */
+    int maxAttempts = 150;
+    
+    /** Multiplier for cooling the temperature (alpha). */
+    double coolingFactor = 0.97;
+    
+    /** Minimum temperature threshold to stop execution. */
+    double epsilon = 0.00001;
 };
 
+/**
+ * @brief Identifiers for supported command-line flags.
+ */
 enum class ArgOption {
     Db, 
     Instance, 
@@ -39,6 +65,13 @@ enum class ArgOption {
     Sample
 };
 
+/**
+ * @brief Parses command-line arguments and maps them into an Args structure.
+ * 
+ * @param argc Number of command-line arguments.
+ * @param argv Array of command-line argument strings.
+ * @return An std::optional containing the parsed Args, or std::nullopt on failure/help request.
+ */
 std::optional<Args> parseArgs(int argc, char** argv) {
     Args opts;
     std::vector<std::string> args(argv + 1, argv + argc);
