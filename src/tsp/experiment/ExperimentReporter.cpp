@@ -1,6 +1,4 @@
 #include "ExperimentReporter.hpp"
-#include <iomanip>
-#include <limits>
 
 ExperimentReporter::ExperimentReporter(){}
 ExperimentReporter::~ExperimentReporter(){}
@@ -59,4 +57,30 @@ void ExperimentReporter::generateReportCSV(const std::string &filepath, const st
                 << csvField(r.timestamp) << ','
                 << csvField(joinPath(r.finalPath)) << '\n';                                               
     }           
+}
+
+void ExperimentReporter::generateSolutionFile(const std::string &filepath, const std::vector<int> &path) {
+    std::ofstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open " << filepath << " for writing.\n";
+        return;
+    }
+
+    for (int id : path) 
+        file << id << ",";
+    
+    file.close();
+}
+
+void ExperimentReporter::generateCoordsFile(const std::string &filepath, const std::vector<std::pair<double, double> > &coords) {
+    std::ofstream file(filepath);
+    if (!file.is_open()) {
+        std::cerr << "Error: Could not open " << filepath << " for writing.\n";
+        return;
+    }
+
+    for (const auto& coord : coords) 
+        file << coord.first << " " << coord.second << "\n";
+    
+    file.close();
 }

@@ -1,6 +1,9 @@
 #pragma once
 #include <fstream>
 #include <sstream>
+#include <iomanip>
+#include <limits>
+#include <iostream>
 
 #include "RunConfig.hpp"
 #include "RunResult.hpp"
@@ -35,4 +38,18 @@ class ExperimentReporter {
          * @param results The list of results to export.
          */
         void generateReportCSV(const std::string &filepath, const std::vector<RunResult> &results);
+
+        /**
+         * @brief Generates a .tsp file containing the sequence of City IDs for the best route.
+         * @param filepath The destination path.
+         * @param path The translated sequence of real City IDs.
+         */
+        void generateSolutionFile(const std::string &filepath, const std::vector<int> &path);
+
+        /**
+         * @brief Generates a .coords file containing the longitude and latitude of the best route.
+         * @param filepath The destination path.
+         * @param coords Vector of (longitude, latitude) pairs.
+         */
+        void generateCoordsFile(const std::string &filepath, const std::vector<std::pair<double, double> > &coords);
 };
