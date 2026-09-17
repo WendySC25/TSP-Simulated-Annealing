@@ -1,8 +1,22 @@
+#pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <optional>
 #include <unordered_map>
+
+/** @brief Defines the execution for the application. */
+enum class ExecutionMode {
+    /** Run a single experiment with the provided parameters. */
+    Single,
+
+    /** Run N experiments with random hyperparameters. */
+    Random,
+
+    /** Run N experiments with the same parameters but different random seeds. */
+    Seeds
+};
 
 /**
  * @brief Configuration parameters for the Simulated Annealing execution.
@@ -13,6 +27,15 @@ struct Args {
     
     /** Path to the problem instance file. */
     std::string instancePath;
+
+    /** Path to save the CSV report. */
+    std::string outPath = "./data/output/exp.csv";
+
+    /** Execution mode */
+    ExecutionMode mode = ExecutionMode::Single;
+
+    /** Number of experiments to run. */
+    int nRuns = 1;
 
     /** Random Number Generator (RNG) seed. */
     int seed = 9695;
@@ -52,6 +75,9 @@ struct Args {
 enum class ArgOption {
     Db, 
     Instance, 
+    Out,
+    Mode,
+    NRuns,
     Seed, 
     TargetP, 
     EpsilonP, 
@@ -72,13 +98,16 @@ enum class ArgOption {
  * @param argv Array of command-line argument strings.
  * @return An std::optional containing the parsed Args, or std::nullopt on failure/help request.
  */
-std::optional<Args> parseArgs(int argc, char** argv) {
+inline std::optional<Args> parseArgs(int argc, char** argv) {
     Args opts;
     std::vector<std::string> args(argv + 1, argv + argc);
 
     static const std::unordered_map<std::string, ArgOption> argMap = {
         {"-db", ArgOption::Db},
         {"-instance", ArgOption::Instance},
+        {"-out", ArgOption::Out},
+        {"-mode", ArgOption::Mode},
+        {"-nRuns", ArgOption::NRuns},
         {"-seed", ArgOption::Seed},
         {"-targetP", ArgOption::TargetP},
         {"-epsilonP", ArgOption::EpsilonP},
@@ -114,6 +143,27 @@ std::optional<Args> parseArgs(int argc, char** argv) {
                 auto v = next(i); if (!v) return std::nullopt;
                 opts.instancePath = *v;
                 break;
+            }
+
+            case ArgOption::Out: { 
+                auto v = next(i); if(v) opts.outPath = *v; 
+                else return std::nullopt; 
+                break;
+            }
+
+            case ArgOption::NRuns: { 
+                auto v = next(i); if(v) opts.nRuns = std::stoi(*v); 
+                else return std::nullopt; 
+                break;
+            }
+
+            case ArgOption::Mode: { 
+                auto v = next(i); 
+                if(!v) return std::nullopt;
+                if (*v == "random") opts.mode = ExecutionMode::Random;
+                else if (*v == "seeds") opts.mode = ExecutionMode::Seeds;
+                else opts.mode = ExecutionMode::Single;
+                break; 
             }
 
             case ArgOption::Seed: {
