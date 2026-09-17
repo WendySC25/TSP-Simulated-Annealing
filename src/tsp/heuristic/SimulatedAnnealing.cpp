@@ -12,7 +12,6 @@ void SimulatedAnnealing::run(double T, Solution &s){
     double p = 0;
     double bestCost = s.getCost();
 
-
     while(T > epsilon) {
         double q = std::numeric_limits<double>::infinity();
         while (p <= q){
@@ -20,15 +19,13 @@ void SimulatedAnnealing::run(double T, Solution &s){
             p = calculateBatch(T,s);
 
             if (p == 0) break; 
-            
+    
             double currentCost = s.evaluate();
             if (currentCost < bestCost) {
                 bestCost = currentCost;
                 s.saveBest();
             }
         }
-
-        
         T = T*coolingFactor;
     }
 
@@ -36,7 +33,6 @@ void SimulatedAnnealing::run(double T, Solution &s){
     s.scanning();
     s.saveBest();  
 }
-
 
 double SimulatedAnnealing::calculateBatch(double T, Solution &s){
     int c = 0;
@@ -50,9 +46,7 @@ double SimulatedAnnealing::calculateBatch(double T, Solution &s){
             c++;
             r += neightborhCost;
             s.acceptPropose();
-
-            // std::cout << std::fixed << std::setprecision(15) << "E: " << neightborhCost<< std::endl;
-
+            if(verbose) std::cout << std::fixed << std::setprecision(15) << "E: " << neightborhCost<< std::endl;
         }   
     }
 

@@ -1,5 +1,5 @@
 #pragma once
-#include "tsp/core/Solution.hpp"
+#include "Solution.hpp"
 #include <limits>
 #include<iostream>
 
@@ -20,6 +20,8 @@ private:
 
     /** Maximum consecutive temperature drops without improvement. */
     int    maxAttemps;
+
+    bool   verbose = false;
 
 public:
     SimulatedAnnealing(double coolingFactor, double epsilon, int batch, int attemps);
